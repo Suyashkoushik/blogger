@@ -4,6 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blogger Auto Post</title>
+     <style>
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            text-align: center;
+            text-decoration: none;
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
     <script src="https://apis.google.com/js/api.js"></script>
     <script>
         // Blogger API settings
@@ -84,6 +103,12 @@
         <textarea id="postContent" name="postContent" rows="10" cols="50" required></textarea><br><br>
 
         <input type="submit" value="Create Post">
+            <!-- Button to go to Terms of Service -->
+    <a href="Terms-of-Service.html" class="button">Terms of Service</a>
+
+    <!-- Button to go to Privacy Policy -->
+    <a href="Privacy-Policy.html" class="button">Privacy Policy</a>
+
     </form>
 </body>
 </html>
