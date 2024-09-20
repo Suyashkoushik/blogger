@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Upload and Metadata Storage</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script type="module">
+        // Import the necessary Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+        import { getFirestore, collection, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCo-22CK4Dg3xxzMHhC8bT9h_54DTSQjfI",
+            authDomain: "earn-by-reading-news-fdb97.firebaseapp.com",
+            databaseURL: "https://earn-by-reading-news-fdb97-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "earn-by-reading-news-fdb97",
+            storageBucket: "earn-by-reading-news-fdb97.appspot.com",
+            messagingSenderId: "557093188815",
+            appId: "1:557093188815:web:6fb3c6325e7cf39d73b3ba"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Function to upload video and store metadata
+        async function uploadVideo() {
+            const fileInput = document.getElementById('videoInput');
+            const titleInput = document.getElementById('videoTitle');
+            const file = fileInput.files[0];
+            const title = titleInput.value.trim();
+
+            if (file && title) {
+                const storageRef = ref(storage, `videos/${file.name}`);
+
+                try {
+                    // Upload the video
+                    await uploadBytes(storageRef, file);
+
+                    // Prepare video metadata
+                    const videoData = {
+                        title: title,
+                        storagePath: `videos/${file.name}`,
+                        duration: 0 // Placeholder for duration
+                    };
+
+                    // Store video metadata in Firestore
+                    await setDoc(doc(collection(db, 'videos'), file.name), videoData);
+
+                    console.log('Video uploaded and metadata saved:', videoData);
+                    alert('Video uploaded successfully!');
+                } catch (error) {
+                    console.error('Error uploading video:', error);
+                    alert('Error uploading video.');
+                }
+            } else {
+                alert('Please select a file and enter a title.');
+            }
+        }
+    </script>
+</head>
+<body class="w3-container w3-light-grey">
+    <h1 class="w3-center">Upload Video</h1>
+    <div class="w3-margin-top w3-center">
+        <input type="text" id="videoTitle" placeholder="Enter Video Title" class="w3-input w3-border" required>
+        <input type="file" id="videoInput" accept="video/*" class="w3-input w3-border w3-margin-top">
+        <button id="uploadButton" class="w3-button w3-blue w3-margin-top" onclick="uploadVideo()">Upload Video</button>
+    </div>
+</body>
+</html>
